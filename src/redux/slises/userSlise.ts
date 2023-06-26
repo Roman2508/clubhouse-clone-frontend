@@ -1,19 +1,19 @@
-import { UserData } from '@/pages'
 import { Axios } from '@/core/axios'
 import { RootState } from '../types'
 import { UserApi } from '@/api/UserApi'
 import { HYDRATE } from 'next-redux-wrapper'
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
+import { UserType } from '@/types'
 
 export interface UserInitialState {
-  data: UserData | null
+  data: UserType | null
 }
 
 const initialState: UserInitialState = {
   data: null,
 }
 
-export const fetchUserData = createAsyncThunk<UserData, number>('user/fetchUserData', async (id: number) => {
+export const fetchUserData = createAsyncThunk<UserType, number>('user/fetchUserData', async (id: number) => {
   const userData = await UserApi(Axios).getUserInfo(id)
   return userData
 })
@@ -31,7 +31,7 @@ export const userSlise = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUserData(state, action: PayloadAction<UserData>) {
+    setUserData(state, action: PayloadAction<UserType>) {
       state.data = action.payload
     },
   },

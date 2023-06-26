@@ -20,7 +20,15 @@ MyApp.getInitialProps = wrapper.getInitialAppProps((store) => async (appContext)
   try {
     const user = await Api(appContext.ctx).user.getMe()
 
-    if (user && user.isActive === 1) {
+    console.log(user, 'user')
+
+    if (!user || user.isActive === 0) {
+      // if user unauthorized - redirect to auth page
+      appContext.ctx.res?.writeHead(302, {
+        Location: '/',
+      })
+      appContext.ctx.res?.end()
+    } else {
       store.dispatch(setUserData(user))
 
       if (appContext.ctx.asPath === '/') {
@@ -29,15 +37,10 @@ MyApp.getInitialProps = wrapper.getInitialAppProps((store) => async (appContext)
         })
         appContext.ctx.res?.end()
       }
-    } else {
-      // if user unauthorized - redirect to auth page
-      appContext.ctx.res?.writeHead(302, {
-        Location: '/',
-      })
-      appContext.ctx.res?.end()
     }
   } catch (error) {
-    console.log(error)
+    // @ts-ignore
+    console.log('_app error', error)
   }
 
   const childrenGip = await App.getInitialProps(appContext)

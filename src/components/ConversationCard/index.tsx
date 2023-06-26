@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import { Avatar } from '../Avatar'
 import styles from './ConversationCard.module.scss'
 import whiteBlockStyles from '../WhiteBlock/WhiteBlock.module.scss'
-import { UserData } from '../../pages'
+import { UserType } from '@/types'
 
 // interface ConversationCard {
 //   title: string
@@ -15,7 +15,7 @@ import { UserData } from '../../pages'
 interface ConversationCardProps {
   title: string
   avatars: string[]
-  speakers: any
+  speakers: UserType[]
   speakersCount: number
   listenersCount: number
 }
@@ -31,26 +31,20 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
     <div className={clsx(whiteBlockStyles.block, styles.card)}>
       <h4 className={styles.title}>{title}</h4>
       <div className={clsx('d-flex mt-10', styles.content)}>
-        <div className={styles.avatars}>
-          {avatars?.slice(0, 2).map((avatarUrl, i) => (
-            <Avatar
-              key={avatarUrl}
-              width="45px"
-              height="45px"
-              src={avatarUrl}
-              className={speakersCount > 1 && i === 1 ? 'lastAvatar' : ''}
-              // className={speakersCount > 1 && i === speakersCount - 1 ? 'lastAvatar' : ''}
-            />
-          ))}
-        </div>
-        <div className={clsx(styles.info, 'ml-10')}>
-          <ul className={styles.users}>
-            {speakers?.slice(0, 5).map((user: any, i: number) => (
-              <li key={i}>
-                {user} <img src="/static/cloud.png" alt="Cloud" width={14} height={14} />
-              </li>
+        <div className={styles.leftCol}>
+          <div className={styles.avatars}>
+            {speakers?.slice(0, 2).map((speakers, i) => (
+              <Avatar
+                key={speakers.id}
+                width="45px"
+                height="45px"
+                src={speakers.avatarUrl}
+                className={speakersCount > 1 && i === 1 ? 'lastAvatar' : ''}
+                // className={speakersCount > 1 && i === speakersCount - 1 ? 'lastAvatar' : ''}
+              />
             ))}
-          </ul>
+          </div>
+
           <ul className={styles.details}>
             <li>
               <img src="/static/user.svg" alt="Users count" width={12} height={12} /> {speakersCount}
@@ -59,6 +53,17 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
               <img className="ml-5" src="/static/message.svg" alt="Users count" width={12} height={12} />{' '}
               {listenersCount}
             </li>
+          </ul>
+        </div>
+
+        <div className={clsx(styles.info)}>
+          <ul className={styles.users}>
+            {speakers?.slice(0, 5).map((user: UserType, i: number) => (
+              <li key={user.id}>
+                {user.fullName} <img src="/static/cloud.png" alt="Cloud" width={14} height={14} />
+                {/* {user.fullName} <img src="/static/cloud.png" alt="Cloud" width={14} height={14} /> */}
+              </li>
+            ))}
           </ul>
         </div>
       </div>

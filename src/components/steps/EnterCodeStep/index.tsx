@@ -7,9 +7,12 @@ import { StepInfo } from '../../StepInfo'
 import { Button } from '@/components/Button'
 import { WhiteBlock } from '../../WhiteBlock'
 import styles from './EnterPhoneStep.module.scss'
+import { MainContext } from '@/pages'
 
 export const EnterCodeStep = () => {
   const router = useRouter()
+
+  const { userData } = React.useContext(MainContext)
 
   const [isLoading, setIsLoading] = React.useState(false)
   const [codes, setCodes] = React.useState(['', '', '', ''])
@@ -35,7 +38,11 @@ export const EnterCodeStep = () => {
   const onSubmit = async (code = '') => {
     try {
       setIsLoading(true)
-      await Axios.get(`/auth/sms/activate?code=${code ? code : codes.join('')}`)
+      await Axios.post(`/auth/sms/activate`, {
+        code: code ? code : codes.join(''),
+        user: userData,
+      })
+      // await Axios.get(`/auth/sms/activate?code=${code ? code : codes.join('')}`)
       router.push('/rooms')
     } catch (error) {
       alert('Помилка при активації :(')

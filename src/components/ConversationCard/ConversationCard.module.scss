@@ -21,8 +21,7 @@
 .users {
   list-style: none;
   padding: 0;
-  margin: 0;
-  margin-bottom: 5px;
+  margin: 0 0 5px 10px;
 
   li {
     display: flex;
@@ -48,6 +47,7 @@
 
 .avatars {
   position: relative;
+
   :global {
     .lastAvatar {
       margin-left: -30px;
@@ -56,6 +56,12 @@
       top: 30px;
     }
   }
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .details {

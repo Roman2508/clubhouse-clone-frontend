@@ -11,6 +11,7 @@ import { Axios } from '@/core/axios'
 // import { checkAuth } from '@/helpers/checkAuth'
 import Login from '@/components/Login/Login'
 import { Api } from '@/api'
+import { UserType } from '@/types'
 
 const stepsComponents = {
   0: WelcomeStep,
@@ -22,25 +23,15 @@ const stepsComponents = {
   6: Login,
 }
 
-export type UserData = {
-  id: number
-  fullName: string
-  avatarUrl: string
-  isActive: number
-  userName: string
-  phone: string
-  token?: string
-}
-
 type MainContextProps = {
   onNextStep: (step: number) => void
-  setUserData: React.Dispatch<React.SetStateAction<UserData>>
-  setFieldValue: (field: keyof UserData, value: string) => void
-  userData: UserData
+  setUserData: React.Dispatch<React.SetStateAction<UserType>>
+  setFieldValue: (field: keyof UserType, value: string) => void
+  userData: UserType
   step: number
 }
 
-const getUserData = (): UserData | '' => {
+const getUserData = (): UserType | '' => {
   try {
     const data = window.localStorage.getItem('userData')
 
@@ -75,14 +66,14 @@ export const MainContext = React.createContext({} as MainContextProps)
 
 export default function RoomPage() {
   const [step, setStep] = React.useState<number>(0)
-  const [userData, setUserData] = React.useState<UserData>({} as UserData)
+  const [userData, setUserData] = React.useState<UserType>({} as UserType)
   const Step = stepsComponents[step as keyof typeof stepsComponents]
 
   const onNextStep = (step: number) => {
     setStep(step)
   }
 
-  const setFieldValue = (field: keyof UserData, value: string) => {
+  const setFieldValue = (field: keyof UserType, value: string) => {
     setUserData((prev) => ({
       ...prev,
       [field]: value,
@@ -117,7 +108,6 @@ export default function RoomPage() {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   try {
     const user = await Api(ctx).user.getMe()
-    // checkAuth(ctx)
 
     if (user && user.isActive === 1) {
       return {
@@ -129,7 +119,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       }
     }
   } catch (error) {
-    console.log('Some error')
+    console.log('Home page error')
   }
   return { props: {} }
 }

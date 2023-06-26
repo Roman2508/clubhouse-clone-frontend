@@ -81,7 +81,8 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
       },
     }
   } catch (error) {
-    console.log('Rooms page error', error)
+    // @ts-ignore
+    console.log('Rooms page error', error.message)
     return {
       props: {
         rooms: [],

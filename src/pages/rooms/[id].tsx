@@ -1,20 +1,20 @@
 import React from 'react'
 import Link from 'next/link'
-import { GetServerSideProps, GetServerSidePropsContext } from 'next'
+import { GetServerSidePropsContext } from 'next'
 
 import Room from '@/components/Room'
 import { Header } from '@/components/Header'
 import { ConversationCard } from '../rooms'
 import { Api } from '@/api'
 import Head from 'next/head'
-import { selectAuthUser } from '@/redux/selectors'
-import { useSelector } from 'react-redux'
 
 interface RoomPageProps {
   room: ConversationCard
 }
 
 const RoomPage: React.FC<RoomPageProps> = ({ room }) => {
+  React.useEffect(() => {}, [])
+
   return (
     <>
       <Head>
@@ -32,7 +32,7 @@ const RoomPage: React.FC<RoomPageProps> = ({ room }) => {
         </Link>
       </div>
 
-      <Room title={room.title} users={[]} />
+      <Room title={room.title} />
     </>
   )
 }
@@ -52,7 +52,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       props: { room },
     }
   } catch (error) {
-    console.log(error)
+    console.log('Room page error')
     return {
       props: {},
       redirect: {
