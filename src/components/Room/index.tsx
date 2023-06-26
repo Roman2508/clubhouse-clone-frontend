@@ -27,12 +27,12 @@ const Room: React.FC<RoomProps> = ({ title }) => {
 
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
-      socket.current = io('http://localhost:3001' /* , { reconnection: false } */)
+      socket.current = io('http://localhost:3001')
 
       // Підключення до комнати
       socket.current.emit('CLIENT@ROOMS:JOIN', { roomId: router.query.id, user })
 
-      // Вихід до комнати
+      // Вихід з комнати
       socket.current.on('SERVER@ROOMS:LEAVE', (user) => {
         setUsers((prev) => prev.filter((el) => el.id !== user.id))
       })

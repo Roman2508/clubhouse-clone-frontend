@@ -3,6 +3,7 @@ import { Room, RoomApi, RoomTypes } from '@/api/RoomApi'
 import { Axios } from '@/core/axios'
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
 import { RootState } from '../types'
+import { UserType } from '@/types'
 
 export interface RoomsInitialState {
   rooms: Room[] | null
@@ -29,8 +30,21 @@ export const roomsSlise = createSlice({
   name: 'rooms',
   initialState,
   reducers: {
-    setRooms: (state, action: PayloadAction<Room[]>) => {
-      state.rooms = action.payload
+    setRooms: (state, { payload }: PayloadAction<Room[]>) => {
+      state.rooms = payload
+    },
+
+    updateRoomsSpeakers: (state, action: PayloadAction<{ users: UserType[]; roomId: string }>) => {
+      if (state.rooms) {
+        const newRooms = state.rooms.map((el) => {
+          if (el.id === +action.payload.roomId) {
+            return { ...el, speakers: [...action.payload.users] }
+          }
+          return el
+        })
+
+        state.rooms = newRooms
+      }
     },
   },
   extraReducers(builder) {
@@ -51,11 +65,11 @@ export const roomsSlise = createSlice({
     builder.addCase(HYDRATE as any, (state, action: PayloadAction<RootState>) => {
       return {
         ...state,
-        ...action.payload.rooms.rooms,
+        ...action.payload.rooms,
       }
       // state.rooms = action.payload.rooms.rooms
     })
   },
 })
 
-export const { setRooms } = roomsSlise.actions
+export const { setRooms, updateRoomsSpeakers } = roomsSlise.actions

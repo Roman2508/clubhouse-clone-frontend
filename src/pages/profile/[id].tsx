@@ -1,6 +1,4 @@
-import { Avatar } from '@/components/Avatar'
-import { Button } from '@/components/Button'
-import { Header } from '@/components/Header'
+import Layout from '@/components/Layout/Layout'
 import Profile from '@/components/Profile'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -12,8 +10,7 @@ const ProfilePage = () => {
   const { id } = router.query
 
   return (
-    <>
-      <Header />
+    <Layout>
       <div className="container pl-20 pr-20">
         <Link href="/rooms" className="d-ib mb-40 cup">
           <img src="/static/back-arrow.svg" alt="back" />
@@ -28,7 +25,7 @@ const ProfilePage = () => {
         t.me/archakov_im"
         />
       </div>
-    </>
+    </Layout>
   )
 }
 
